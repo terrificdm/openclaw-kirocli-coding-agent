@@ -171,45 +171,7 @@ bash pty:true workdir:~/project background:true command:"claude 'Your task'"
 
 AWS AI coding assistant with session persistence, custom agents, steering, and MCP integration.
 
-### Installation
-
-```bash
-# macOS / Linux (recommended)
-curl -fsSL https://cli.kiro.dev/install | bash
-
-# Linux AppImage (portable, no install needed)
-wget https://desktop-release.q.us-east-1.amazonaws.com/latest/kiro-cli.appimage
-chmod +x kiro-cli.appimage && ./kiro-cli.appimage
-
-# Ubuntu (.deb)
-wget https://desktop-release.q.us-east-1.amazonaws.com/latest/kiro-cli.deb
-sudo dpkg -i kiro-cli.deb && sudo apt-get install -f
-
-# Linux zip (check glibc version first: ldd --version)
-# Use standard version for glibc >= 2.34, musl version for older
-curl --proto '=https' --tlsv1.2 -sSf 'https://desktop-release.q.us-east-1.amazonaws.com/latest/kirocli-x86_64-linux.zip' -o 'kirocli.zip'
-unzip kirocli.zip && ./kirocli/install.sh
-```
-
-**Proxy (enterprise, v1.8.0+):** Set `HTTP_PROXY`, `HTTPS_PROXY`, `NO_PROXY` environment variables.
-
-### Authentication
-
-Supports GitHub, Google, AWS Builder ID, and IAM Identity Center.
-
-```bash
-kiro-cli login      # Sign in (prompts automatically on first use)
-kiro-cli logout     # Sign out
-kiro-cli whoami     # Check current user
-kiro-cli doctor     # Diagnose issues
-```
-
-**Remote login (SSH):** Builder ID/IAM uses device code (no setup needed). For social login (Google/GitHub), use SSH port forwarding:
-```bash
-# 1. Run kiro-cli login on remote, note the port (e.g., 49153)
-# 2. On local machine: ssh -L 49153:localhost:49153 -N user@remote-host
-# 3. Press Enter on remote, complete auth in local browser
-```
+**Install:** https://kiro.dev/docs/cli/installation
 
 ### Basic Usage
 
@@ -252,29 +214,6 @@ bash pty:true workdir:~/project background:true command:"kiro-cli --agent aws-ex
 # Resume previous session
 bash pty:true workdir:~/project command:"kiro-cli chat --resume"
 ```
-
-### Key Arguments
-
-| Argument | Description |
-| -------- | ----------- |
-| `--no-interactive` | Single response to STDOUT, then exit |
-| `--resume` / `-r` | Resume last conversation in current directory |
-| `--resume-picker` | Interactive session picker |
-| `--agent <name>` | Use specified custom agent |
-| `--trust-all-tools` | Skip all tool confirmations |
-| `--trust-tools <list>` | Trust only listed tools (comma-separated) |
-| `-v` / `-vv` / `-vvv` | Increase verbosity |
-
-### In-Chat Commands
-
-| Command | Description |
-| ------- | ----------- |
-| `/editor` | Open editor for multi-line input (default: vi) |
-| `/chat save <path>` | Save session to JSON file |
-| `/chat load <path>` | Load session from JSON file |
-| `/chat resume` | Interactive session picker |
-
-**Multi-line input:** Press `Ctrl+J` to insert newline, or use `/editor`.
 
 ### Custom Agents
 
@@ -319,16 +258,6 @@ kiro-cli mcp status --name my-server
 kiro-cli mcp remove --name my-server --scope workspace
 ```
 
-### Other Commands
-
-```bash
-kiro-cli translate "list all files"    # Natural language → shell command
-kiro-cli translate -n 3 "search text"  # Generate multiple options
-kiro-cli update                        # Update Kiro CLI
-kiro-cli settings list --all           # Show all settings
-kiro-cli uninstall                     # Uninstall (macOS)
-```
-
 ### Plan Agent
 
 Plan Agent is a built-in agent for structured planning before execution. It helps transform ideas into detailed implementation plans.
@@ -357,41 +286,9 @@ Shift + Tab
 **Plan workflow (4 phases):**
 
 1. **Requirements gathering** — Structured questions with multiple choice options
-   - Answer with format: `1=a, 2=b` or provide custom answers
-2. **Research and analysis** — Explores codebase, identifies patterns and technologies
-3. **Implementation plan** — Creates detailed task breakdown with clear objectives
+2. **Research and analysis** — Explores codebase, identifies patterns
+3. **Implementation plan** — Detailed task breakdown with clear objectives
 4. **Handoff to execution** — After approval (`y`), plan transfers to execution agent
-
-**Example interaction:**
-
-```bash
-> /plan I want to build a todo app
-
-[plan] > I understand you want to build a todo app.
-
-[1]: What platform should this todo app target?
-  a. **Web Application**
-  b. **Mobile App**
-  c. **CLI Tool**
-
-[2]: What's the primary use case?
-  a. **Personal Task Management**
-  b. **Team Collaboration**
-
-> 1=c, 2=a
-
-[plan] > *Researching your codebase...*
-        *Creating implementation plan...*
-
-**Implementation Plan - Todo CLI**
-Task 1: Create database schema...
-Task 2: Implement CLI commands...
-Task 3: Add advanced features...
-
-Does this plan look good? [y/n]: y
-
-[default] > Implement this plan: [Plan transferred to execution agent]
-```
 
 **Plan Agent limitations (read-only):**
 - ✓ Can read files, search code, research documentation
@@ -516,17 +413,3 @@ This triggers an immediate wake event — gets pinged in seconds, not 10 minutes
 - **exec is your friend:** `codex exec "prompt"` runs and exits cleanly - perfect for one-shots.
 - **submit vs write:** Use `submit` to send input + Enter, `write` for raw data without newline.
 - **Sass works:** Codex responds well to playful prompts. Asked it to write a haiku about being second fiddle to a space lobster, got: _"Second chair, I code / Space lobster sets the tempo / Keys glow, I follow"_ 🦞
-
----
-
-## Learnings (Feb 2026)
-
-- **Kiro CLI:** AWS coding assistant with unique features — session persistence, custom agents, steering, MCP.
-- **No git required:** Unlike Codex, Kiro runs in any directory.
-- **Flexible auth:** GitHub/Google/AWS Builder ID/IAM Identity Center.
-- **Remote login:** Builder ID/IAM uses device code (easy). Social login needs SSH port forwarding.
-- **Tool trust:** `--trust-all-tools` for full automation, `--trust-tools` for fine-grained control.
-- **Session resume:** `--resume` continues last conversation, `--resume-picker` for history browser.
-- **Steering:** `.kiro/steering/*.md` provides persistent project context. Also supports AGENTS.md standard.
-- **Kiro + OpenClaw:** `--no-interactive` for simple queries; interactive mode for multi-turn tasks (can run foreground or background).
-- **Plan Agent option:** For complex multi-step tasks in Kiro, suggest `/plan` to user — it clarifies requirements, researches codebase, creates task breakdown, then hands off to execution.
