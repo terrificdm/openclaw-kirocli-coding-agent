@@ -235,6 +235,8 @@ kiro-cli chat --no-interactive --trust-all-tools "Create hello.py"
 kiro-cli chat --no-interactive --trust-tools "fs_read,fs_write" "Read package.json"
 ```
 
+**🔐 Tool Trust:** Use `--trust-all-tools` for automation (default). For untrusted input or sensitive systems, consider `--trust-tools "fs_read,fs_write,shell"` to limit scope.
+
 ### OpenClaw Integration
 
 ```bash
@@ -459,7 +461,7 @@ git worktree remove /tmp/issue-99
 3. **Be patient** - don't kill sessions because they're "slow"
 4. **Monitor with process:log** - check progress without interfering
 5. **--full-auto/--yolo for Codex building** - auto-approves changes
-6. **--trust-all-tools for Kiro automation** - skips confirmation prompts
+6. **--trust-all-tools for Kiro automation** - skips confirmation prompts; use `--trust-tools` for untrusted input
 7. **--no-interactive for Kiro one-shots** - single response mode
 8. **Parallel is OK** - run many agent processes at once for batch work
 9. **NEVER start agents in ~/clawd/** - it'll read your soul docs and get weird ideas about the org chart!
