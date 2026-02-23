@@ -163,10 +163,6 @@ OpenClaw: [发送批准到 Kiro]
          Kiro 正在进行修改... 完成后我会通知你。
 ```
 
-## 许可证
-
-MIT
-
 ## 链接
 
 - [OpenClaw](https://github.com/openclaw/openclaw)

@@ -163,10 +163,6 @@ OpenClaw: [Sends approval to Kiro]
          Kiro is making changes... I'll notify you when done.
 ```
 
-## License
-
-MIT
-
 ## Links
 
 - [OpenClaw](https://github.com/openclaw/openclaw)
